@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="invoice_cancel_watermark" inherit_id="account.report_invoice_document">
+		<xpath expr="//div[@class='page']" position="after">
+			<t t-if="o.type == 'out_invoice' and o.state == 'cancel' ">
+				<div style="top:0px;position:absolute;opacity:0.25;width:100%;text-align:center;z-index:1000;">
+					<img class="img img-responsive" src="/factura_smart/static/src/img/cancel.png"/>
+				</div>
+			</t>
+		</xpath>
+	</template>
+</odoo>

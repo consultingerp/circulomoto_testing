@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="core_generar_folios_tipo_tree" model="ir.ui.view">
+            <field name="name">Formato de Folios</field>
+            <field name="model">core_formato_folio</field>
+            <field name="arch" type="xml">
+                <tree string="Formato de Folio">
+                    <field name="formato" placeholder="Formato"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="core_generar_folios_tipo_form" model="ir.ui.view">
+            <field name="name">Formato de Folios</field>
+            <field name="model">core_formato_folio</field>
+            <field name="arch" type="xml">
+                <form string="Formato de Folio">
+                    <div class="form-group">
+                        <span>Formato:</span>
+                        <h1>
+                            <field name="formato" placeholder="Formato"/>
+                        </h1>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="core_generar_folios_tipo_view">
+            <field name="name">Tipos Folios</field>
+            <field name="res_model">core_formato_folio</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

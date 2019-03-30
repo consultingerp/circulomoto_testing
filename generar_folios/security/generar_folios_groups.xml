@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record id="usuario_generador_folios" model="res.groups">
+			<field name="name">Administrador de folios</field>
+		</record>
+	</data>
+</odoo>

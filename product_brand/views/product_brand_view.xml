@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record id="product_brand_form_view" model="ir.ui.view">
+			<field name="name">product.brand..form</field>
+			<field name="model">product.brand</field>
+			<field name="arch" type="xml">
+				<form string="Crear: Marca">
+					<group>
+                		<field name="name"></field>
+                	</group>
+                </form>
+            </field>
+		</record>
+		<record id="product_template_brand_form_view" model="ir.ui.view">
+	    	<field name="name">product.template.brand.form.view</field>
+	    	<field name="model">product.template</field>
+	    	<field name="inherit_id" ref="product.product_template_only_form_view"></field>
+	    	<field name="arch" type="xml">
+	    		<xpath expr="//field[@name='categ_id']" position="after">
+	    			<field name="brand_id"></field>
+	    		</xpath>
+	   		</field>
+		</record>
+	</data>
+</odoo>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record id="fomato_folio_1" model="core_formato_folio">
+			<field name="formato">{formato_fecha}{prefijo}{contador}</field>
+		</record>
+	</data>
+</odoo>

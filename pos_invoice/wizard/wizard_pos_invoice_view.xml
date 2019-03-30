@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_advance_payment_inv" model="ir.ui.view">
+        <field name="name">Invoice Orders</field>
+        <field name="model">wizard.pos.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Invoice Sales Order">
+                <p class="oe_grey">
+                    Las facturas se crearán en borrador a partir de los pedidos de punto de venta. 
+                </p>
+                <group>
+                    <field name="count" readonly="True"/>
+                    <field name="advance_payment_method" class="oe_inline" widget="radio"/>
+                </group>
+                <footer>
+<!--                    <button name="create_invoices" string="Create and View Invoices" type="object"
+                                context="{'open_invoices': True}" class="btn-primary"/>-->
+                    <button name="create_invoices" string="Create Invoices" type="object"
+                                class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_view_sale_advance_payment_inv" model="ir.actions.act_window">
+        <field name="name">Facturas Punto de Venta</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.pos.invoice</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="groups_id" eval="[(4,ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+    <act_window id="wizard_posorder_invoice"
+                    name="Factura Acumulada"
+                    src_model="pos.order"
+                    res_model="wizard.pos.invoice"
+                    view_mode="form"
+                    target="new"
+                    key2="client_action_multi" />
+</odoo>

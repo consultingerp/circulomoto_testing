@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record id="s4g_import_images_item" model="website.menu">
+			<field name="name">Import product images</field>
+			<field name="url">/page/import_product_images.import_product_images</field>
+			<field name="parent_id" ref="website.main_menu"/>
+			<field name="sequence" type="int">50</field>
+			<field name="website_id" ref="website.default_website"/>
+		</record>
+	</data>
+</odoo>

@@ -1,0 +1,140 @@
+
+# -*- coding: utf-8 -*-
+from collections import defaultdict
+from odoo import fields, models, api
+
+class productList(models.Model):
+	_name = 'product.list'
+	_inherit = ['mail.thread', 'mail.activity.mixin']
+
+	cuenta_analitica_id = fields.Many2one('account.analytic.account',string='Cuenta Analitica')
+	project_id = fields.Many2one('project.project',string='Proyecto',
+		default=lambda self: self.env.context.get('default_project_id'),
+		track_visibility='onchange',readonly=True)
+	field_bool = fields.Boolean(default=False)
+	product_list_ids = fields.One2many('product.list.line','product_list_id',string='Productos')
+	pruchase_order_id = fields.Many2one('purchase.order')
+	state = fields.Selection([
+		('draft', 'En Elaboración'),
+		('confirmed', 'En Validación'),
+		('done', 'Lista Validada'),
+	], default='draft', readonly=True, track_visibility='onchange')
+
+	@api.multi
+	def set_done(self):
+		self.state = 'done'
+	@api.multi
+	def set_confirm(self):
+		for record in self.product_list_ids:
+			print('CANTIDADES DE LISTA DE PRODUCOS --<<<>>>',str(record.cantidad))
+			print('TAREASSSSS DE LISTA DE PRODUCOS --<<<>>>',str(record.task_id.id))
+			record.product.sudo().write({'x_qty_list':record.cantidad})
+			record.product.sudo().write({'x_task':record.task_id.id})
+			#print('CANTIDADES DE LISTA DE PRODUCOS --<<<>>>',str(record.product.x_qty_list))
+		self.state = 'confirmed'
+	@api.multi
+	def set_draft(self):
+		self.state = 'draft'
+
+	@api.multi
+	def generar_orden_compra(self):
+		seller_products = defaultdict(set)
+		product_tsk = defaultdict(set)
+		for record in self.product_list_ids:
+			#print(str(record))
+			for vendor in record.product.seller_ids:
+				seller = vendor.search([
+					'|', ('product_tmpl_id', '=', record.product.id),
+					('product_id', '=', record.product.id),
+					('name', '=', vendor.name.name)], limit=1)
+				seller_products[seller.name.id].add(record.product.id)
+		for seller in seller_products.items():
+			supplier = self.env['res.partner'].browse(seller[0])
+			proyecto_id = self.project_id
+			vals = {
+				'date_order':fields.Datetime.now(),
+				'x_cuenta_analitica_id':proyecto_id.id,
+				'partner_id':supplier.id
+			}
+			#print('purchase -<<<<<<',str(vals))
+			res = self.env['purchase.order'].create(vals)
+
+			for products in seller[1]:
+				product = self.env['product.product'].browse(products)
+				product_list_line = self.env['product.list.line']
+				print('CANTIDADADADSADASDASDA-<<<-<-<-<<-<<<<>>><-<-<-<',str(product.x_qty_list))
+				print('TAREAADADSADASDASDA-<<<-<-<-<<-<<<<>>><-<-<-<',str(product.x_task))
+				vals_order_line = {
+					'order_id':res.id,
+					'product_id':product.id,
+					'name':product.name,
+					'x_proyecto':proyecto_id.id,
+					'x_tarea':product.x_task,
+					'product_qty':product.x_qty_list,
+					'date_planned':fields.Datetime.now(),
+					'product_uom':product.uom_id.id,
+					'price_unit':1.0
+				}
+				print(str(vals_order_line))
+				res_line = self.env['purchase.order.line'].create(vals_order_line)
+			r = self.pruchase_order_id
+			r = res
+		self.field_bool = True
+		return r, res_line
+
+class productListLine(models.Model):
+	_name = 'product.list.line'
+
+	product_list_id = fields.Many2one('product.list')
+	product = fields.Many2one('product.product',string='Productos',required=True)
+	project_id = fields.Many2one('project.project',
+		default=lambda self: self.env.context.get('default_project_id'),store=True)
+	task_id = fields.Many2one('project.task',store=True)
+	marca = fields.Char(string='Marca',compute="get_marca")
+	modelo = fields.Char(string='Modelo',compute="get_modelo")
+	precio = fields.Float(string='Precio',compute="get_precio")
+	cantidad = fields.Float(string='Cantidad')
+	uom_lista = fields.Many2one('product.uom', string="Unidad de medida", 
+		related='product.uom_id',required=True,readonly=True)
+	name = fields.Text(string='Notas')
+
+	#@api.onchange('task_id')
+	#def get_id_task(self):
+		#for record in self:
+			#self.product.sudo().write({'x_task':record.task_id.id})
+
+	@api.onchange('product')
+	def get_marca(self):
+		for record in self:
+			record.marca = record.product.product_tmpl_id.brand_id.name
+	
+	@api.onchange('product')
+	def get_modelo(self):
+		for record in self:
+			record.modelo = record.product.product_tmpl_id.modelo
+
+	@api.onchange('product')
+	def get_precio(self):
+		for record in self:
+			record.precio = record.product.product_tmpl_id.list_price
+			
+class productProject(models.Model):
+	_inherit = 'project.project'
+
+	product_list_count = fields.Integer(compute="get_product_list_count")
+
+	def get_product_list_count(self):
+		print('# lines de product_list_',str(self.ids))
+		list_data = self.env['product.list'].read_group([('project_id','in',self.ids)],['project_id'],['project_id'])
+		print('LIST DATA -<<<<',str(list_data))
+		mapped_data = dict((data['project_id'][0], data['project_id_count']) for data in list_data)
+		print('mapped_data-<<<<<< ',str(mapped_data))
+		for project in self:
+			project.product_list_count = mapped_data.get(project.id, 0)
+			print('numeros ->>>><',str(project.product_list_count))
+
+class productTask(models.Model):
+    _inherit = 'product.product'
+
+    x_task = fields.Integer(string='Field Label')
+    x_qty_list = fields.Integer(string='Field Label')

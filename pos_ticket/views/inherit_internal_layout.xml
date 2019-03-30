@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<template id="inherit_internal_layout" inherit_id="web.internal_layout">
+			<xpath expr="//div[@class='header']" position="replace">
+				<div class="header">
+			        <div class="row">
+			            <div class="text-left">
+			                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+			            </div>
+			            <div class="text-center" style="display:none;">
+			                <span t-esc="company.name"/>
+			            </div>
+			            <div class="text-right">
+			                <ul class="list-inline">
+			                    <li><span class="page"/></li>
+			                    <li>/</li>
+			                    <li><span class="topage"/></li>
+			                </ul>
+			            </div>
+			        </div>
+			    </div>
+			</xpath>
+		</template>
+	</data>
+</odoo>

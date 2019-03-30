@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="wizard_form_view">
+            <field name="name">wizard.form</field>
+            <field name="model">desc_marca.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Add Discount">
+                    <group>
+			<field name="Descuento"/> %
+                        <field name="Productos"/>
+                        <field name="Tarifa"/>
+                    </group>
+                    <footer>
+                        <button name="agregar" type="object"
+                                string="Agregar" class="oe_highlight"/>
+                        or
+                        <button special="cancel" string="Cancelar"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="launch_session_wizard"
+                    name="Add Discount"
+                    src_model="product.pricelist"
+                    res_model="desc_marca.wizard"
+                    view_mode="form"
+                    target="new"
+                    key2="client_action_multi"/>
+    </data>
+</odoo>

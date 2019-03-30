@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="web_external_layout_background" inherit_id="web.external_layout_background">
+		<xpath expr="//div[hasclass('header','o_background_header')]" position="replace">
+			<div class="header o_background_header">
+	            <div class="pull-left">
+	                <h3 class="mt0 text-left" t-field="company.report_header"/>
+	            </div>
+	            <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" class="pull-right"/>
+	            <div class="pull-left company_address">
+	                <div>
+	                    <strong t-field="company.partner_id.name"/>
+	                </div>
+	                <span t-field="company.partner_id.street_name"/>
+	                <span t-field="company.partner_id.street_number"/>/<span t-field="company.partner_id.street_number2"/><br/>
+	                <span t-field="company.partner_id.city"/>
+	                <span t-field="company.partner_id.zip"/><br/>
+	                <span t-field="company.partner_id.country_id"/><br/>
+	                <span t-field="company.partner_id.property_account_position_id"/><br/>
+	                <span t-field="company.partner_id.vat"/><br/>
+	                <span>ventas@ferretevar.com</span>
+	            </div>
+	            <div class="clearfix mb8"/>
+	        </div>
+		</xpath>
+		<xpath expr="//div[hasclass('footer','o_background_footer')]/div[1]/ul" position="replace">
+			<ul class="list-inline">
+                <li style="color:#0024FF !important;" t-if="company.phone"><i class="fa fa-phone"/> <span t-field="company.phone"/></li>
+                <li style="color:#0024FF !important;" t-if="company.website"><i class="fa fa-globe"/> <span t-field="company.website"/></li>
+            </ul>
+		</xpath>
+	</template>
+</odoo>

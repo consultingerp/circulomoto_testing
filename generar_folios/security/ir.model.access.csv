@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_core_generador_folio,access_core_generador_folio,model_core_generador_folio,,1,1,1,1
+access_core_formato_folio,access_core_formato_folio,model_core_formato_folio,,1,1,1,1

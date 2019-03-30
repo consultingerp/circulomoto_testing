@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<report
+            id="pos_receipt_return"
+            model="pos.order"
+            string="Ticket"
+            report_type="qweb-pdf"
+            name="pos_ticket.report_receipt_return"
+            file="pos_ticket.report_receipt_return"
+        />
+	</data>
+</odoo>

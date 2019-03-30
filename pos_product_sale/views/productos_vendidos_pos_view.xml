@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record id="productos_vendidos_pos_view" model="ir.ui.view">
+            <field name="name">pos.productos_vendidos.view</field>
+            <field name="model">pos.order.line</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_order_tree_all_sales_lines"></field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="replace">
+                    <tree string="Productos vendidos" create="0">
+		                <field name="order_id"/>
+		                <field name="x_fecha_pedido"/>
+		                <field name="x_proveedor_cmoto" />
+		                <field name="product_id"/>
+		                <field name="qty"/>
+		                <field name="price_unit" widget="monetary"/>
+		                <field name="discount"/>
+		                <field name="price_subtotal" sum="Total"/>
+		            </tree>
+                </xpath>
+            </field>
+    	</record>
+
+    	<record model="ir.ui.view" id="productos_vendidos_pos_search">
+            <field name="name">pos.productos_vendidos.search</field>
+            <field name="model">pos.order.line</field>
+            <field name="arch" type="xml">
+				<search string="Search Partner">
+	                <field name="product_id"></field>
+                    <field name="x_proveedor"></field>
+	                <group expand="0" name="group_by" string="Group By">
+	                    <filter name="x_proveedor" string="Proveedor" context="{'group_by' : 'x_proveedor'}"></filter>
+	                </group>
+               </search>
+	        </field>
+		</record>
+
+	    <record model="ir.actions.act_window" id="productos_vendidos_action">
+	            <field name="name">Lineas de productos</field>
+	            <field name="res_model">pos.order.line</field>
+	            <field name="view_type">form</field>
+	            <field name="view_mode">tree,form,pivot</field>
+	    </record>
+
+		<menuitem id="productos_vendidos_item" name="Productos vendidos" parent="point_of_sale.menu_point_of_sale" action="productos_vendidos_action"></menuitem>
+	</data>
+</odoo>

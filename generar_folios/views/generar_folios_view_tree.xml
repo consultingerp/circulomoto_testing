@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="core_generar_folios_view_tree" model="ir.ui.view">
+            <field name="name">Generar Folios</field>
+            <field name="model">core_generador_folio</field>
+            <field name="arch" type="xml">
+                <tree string="Generador Folio">
+                    <button name="getFolio(prefijo)" type="object" string="Test"/>
+                    <field name="nombre_folio"/>
+                    <field name="prefijo"/>
+                    <field name="contador"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="core_generar_folios_view">
+            <field name="name">Generar Folios</field>
+            <field name="res_model">core_generador_folio</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

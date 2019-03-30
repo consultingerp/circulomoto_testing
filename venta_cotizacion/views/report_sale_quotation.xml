@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="report_sale_quotation" inherit_id="sale.report_saleorder_document">
+		<xpath expr="//div[hasclass('col-xs-5','col-xs-offset-1')]" position="replace">
+			<div class="col-xs-5 col-xs-offset-1">
+				<div>
+                    <div>
+                        <t t-if="doc.partner_id.parent_id.name">
+                            <span itemprop="name" t-esc="doc.partner_id.parent_id.name"/>
+                        </t>
+                        <t t-elif="not doc.partner_id.parent_id.name">
+                            <span itemprop="name" t-esc="doc.partner_id.name"/>
+                        </t>
+                    </div>
+                    <span t-field="doc.partner_id.street_name"/>
+                    <span t-field="doc.partner_id.street_number"/> <span t-field="doc.partner_id.street_number2"/>
+                    <br/>
+                    <span t-field="doc.partner_id.state_id.code"/>
+                    <span t-field="doc.partner_id.zip"/>
+                    <br/>
+                    <span t-field="doc.partner_id.country_id"/>
+                </div>
+                <p t-if="doc.partner_id.vat"><t t-esc="doc.company_id.country_id.vat_label or 'RFC'"/>: <span t-field="doc.partner_id.vat"/></p>
+            </div>
+		</xpath>
+        <xpath expr="//h2" position="replace">
+            <h2 style="color:#0024FF">
+                <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+                    <span t-if="doc.state not in ['draft','sent']">Pedido </span>
+                    <span t-if="doc.state in ['draft','sent']">Cotización </span>
+                </t>
+                <t t-if="env.context.get('proforma', False) or is_pro_forma">
+                    <span>Factura Pro-Forma</span>
+                </t>
+                <span t-field="doc.name"/>
+            </h2>
+        </xpath>
+        <xpath expr="//div[hasclass('row','mt32','mb32')]/div[3]" position="replace">
+            <div t-if="doc.date_order and doc.state in ['draft','sent']" class="col-xs-3">
+                <strong>Fecha Cotización:</strong>
+                <p t-field="doc.date_order"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('row','mt32','mb32')]/div[@t-if='doc.user_id.name']" position="replace">
+            <div t-if="doc.user_id.name" class="col-xs-3">
+                <strong>Vendedor:</strong>
+                <p t-field="doc.user_id"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('row','mt32','mb32')]/div[@t-if='doc.payment_term_id']" position="after">
+            <div t-if="doc.user_id.name" class="col-xs-3">
+                <strong>Vigencia Cotización:</strong>
+                <p t-field="doc.x_vigencia"/>
+            </div>
+        </xpath>
+        <xpath expr="//table[hasclass('table','table-condensed')]" position="replace">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th style="color:#0024FF">Partida</th>
+                        <th style="color:#0024FF">Código SAT</th>
+                        <th style="color:#0024FF">Descripción</th>
+                        <th style="color:#0024FF" class="text-right">Cantidad</th>
+                        <th style="color:#0024FF" class="text-right">Unidad de Medida SAT</th>
+                        <th style="color:#0024FF" class="text-right">Precio Unitario</th>
+                        <th style="color:#0024FF" t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Descuento</th>
+                        <th style="color:#0024FF" class="text-right" groups="sale.group_show_price_subtotal">Monto</th>
+                        <th style="color:#0024FF" class="text-right price_tax_included" groups="sale.group_show_price_total">Total</th>
+                    </tr>
+               </thead>
+               <tbody class="sale_tbody">
+                    <t t-foreach="page" t-as="layout_category">
+
+                        <t t-if="layout_category_size > 1 or page_size > 1" groups="sale.group_sale_layout">
+                            <tr class="active">
+                                <td colspan="7" style="font-weight: bold; border-bottom: 1px solid black;">&amp;bull;
+                                    <t t-esc="layout_category['name']"/>
+                                </td>
+                            </tr>
+                        </t>
+
+                        <!-- Lines associated -->
+                        <t t-foreach="layout_category['lines']" t-as="l">
+                            <tr>
+                                <td><span t-field="l.x_num_partida"/></td>
+                                <td><span t-field="l.product_id.l10n_mx_edi_code_sat_id"/></td>
+                                <td><span t-field="l.name"/></td>
+                                <td class="text-right">
+                                    <span t-field="l.product_uom_qty"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="l.product_id.uom_id.l10n_mx_edi_code_sat_id"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="l.price_unit"/>
+                                </td>
+                                <td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
+                                    <span t-field="l.discount"/>
+                                </td>
+                                <td class="text-right" groups="sale.group_show_price_subtotal">
+                                    <span t-field="l.price_subtotal"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                </td>
+                                <td class="text-right" groups="sale.group_show_price_total">
+                                    <span t-field="l.price_total"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                </td>
+                            </tr>
+                        </t>
+
+                        <t t-if="(layout_category_size > 1 or page_size > 1) and layout_category['subtotal']" groups="sale.group_sale_layout">
+                            <tr class="text-right">
+                                <td colspan="6">
+                                    <strong>Subtotal: </strong>
+                                    <t t-set="subtotal" t-value="sum(line.price_subtotal for line in layout_category['lines'])"/>
+                                    <span t-esc="subtotal" t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"/>
+                                </td>
+                            </tr>
+                        </t>
+
+                    </t>
+                </tbody>
+            </table>
+        </xpath>
+        <xpath expr="//p[@t-field='doc.note']" position="before">
+            <span t-esc="doc._amount_to_text()"/>
+        </xpath>
+        <xpath expr="//p[@t-if='doc.payment_term_id.note']" position="replace">
+        </xpath>
+        <xpath expr="//div[hasclass('clearfix')]" position="replace">
+            <div class="clearfix">
+                <div class="row pull-right" name="total">
+                    <div>
+                        <table class="table-condensed" style="min-width: 200px;max-width: 350px;">
+                            <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                <td><strong>Subtotal</strong></td>
+                                <td class="text-right">
+                                    <span t-field="doc.amount_untaxed"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                </td>
+                            </tr>
+                            <t t-set="tax_groups_length" t-value="len(doc._get_tax_amount_by_group())"/>
+                            <t t-foreach="doc._get_tax_amount_by_group()" t-as="amount_by_group">
+                                <tr style="border-bottom:1px solid #dddddd;">
+                                    <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
+                                        <td><span t-esc="amount_by_group[0]"/></td>
+                                        <td class="text-right">
+                                            <span t-esc="amount_by_group[1]"
+                                                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                        </td>
+                                    </t>
+                                    <t t-else ="">
+                                        <td>
+                                            <span t-esc="amount_by_group[0]"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="amount_by_group[1]"
+                                                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                            <tr class="border-black">
+                                <td style="color:#0024FF"><strong>Total</strong></td>
+                                <td style="color:#0024FF" class="text-right">
+                                    <span t-field="doc.amount_total"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+	</template>
+</odoo>

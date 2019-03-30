@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        
+        <menuitem id="main_core_genera_folios_menu" name="Generación de Folios" groups="usuario_generador_folios,base.group_no_one" sequence="99"/>
+        
+        <menuitem id="act_core_genera_folios_menu" name="Crear Folios" parent="main_core_genera_folios_menu" sequence=""/>
+        
+        <menuitem id="core_genera_folios_menu" name="Crear Folios" sequence="10" parent="main_core_genera_folios_menu" action="core_generar_folios_view"/>
+
+        <menuitem id="core_genera_folios_tipo_menu" name="Tipos de Folios" sequence="20" parent="main_core_genera_folios_menu" action="core_generar_folios_tipo_view"/>
+        
+    </data>
+</odoo>

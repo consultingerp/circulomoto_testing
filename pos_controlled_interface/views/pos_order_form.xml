@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="pos_config_control_view" model="ir.ui.view">
+        <field name="name">pos_config_control_view</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('row','mt16','o_settings_container')]/div[@id='product_prices']/div[1]" position="after">
+                <group name="control_interface" >
+                        <field name="control_discount"/>
+                        <field name="control_price"/>
+                    </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

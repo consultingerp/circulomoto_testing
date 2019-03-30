@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<!-- Item de menú para inventario -->
+	<data>
+		<record model="ir.actions.act_window" id="marca_item_action">
+			<field name="name">Marcas</field>
+			<field name="res_model">x_cmoto.marcas</field>
+			<field name="view_type">form</field>
+			<field name="view_form">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Agregar una marca
+				</p>
+			</field>
+		</record>
+
+		<menuitem id="marcas_item" 
+			 name="Marcas" 
+			 parent="stock.menu_stock_config_settings" 
+			 action="marca_item_action">	 
+		</menuitem>
+
+		<!-- Item para ventas -->
+		<record model="ir.actions.act_window" id="marca_ventas_item_action">
+			<field name="name">Marcas</field>
+			<field name="res_model">x_cmoto.marcas</field>
+			<field name="view_type">form</field>
+			<field name="view_form">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Agregar una marca
+				</p>
+			</field>
+		</record>
+
+		<menuitem id="marcas_ventas_item" 
+			 name="Marcas" 
+			 parent="sale.menu_sale_config" 
+			 action="marca_ventas_item_action">	 
+		</menuitem>
+	</data>
+</odoo>

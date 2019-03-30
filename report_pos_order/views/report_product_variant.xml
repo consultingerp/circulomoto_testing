@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id='report_product_variant' inherit_id="point_of_sale.report_saledetails">
+		<xpath expr="//tr[@t-foreach='products']/td[1]" position="replace">
+            <td>[<t t-esc="line['code'] or ''" />] <t t-esc="line['product_name']" /></td>
+		</xpath>
+	</template>
+</odoo>

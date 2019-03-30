@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="group_pyth_disciple" model="res.groups">
+            <field name="name">validacion_factura</field>
+            <field name="comment">Grupo para validacion de facturas</field>
+        </record>
+    </data>
+</odoo>

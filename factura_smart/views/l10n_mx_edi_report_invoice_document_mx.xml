@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="l10n_mx_edi_report_invoice_document_mx" inherit_id="account.report_invoice_document">
+		<xpath expr="//div[@name='invoice_address']" position="replace">
+			<div name="invoice_address" class="col-xs-5 col-xs-offset-7">
+					<div>
+						<t t-if="o.partner_id.parent_id.name">
+							<span itemprop="name" t-esc="o.partner_id.parent_id.name"/>
+						</t>
+						<t t-elif="not o.partner_id.parent_id.name">
+							<span itemprop="name" t-esc="o.partner_id.name"/>
+						</t>
+					</div>
+					<span t-field="o.partner_id.street_name"/>
+					<span t-field="o.partner_id.street_number"/>
+					<span t-field="o.partner_id.street_number2"/>
+					<br/>
+					<span t-field="o.partner_id.state_id.code"/>
+					<span t-field="o.partner_id.zip"/>
+					<br/>
+					<span t-field="o.partner_id.country_id"/>
+				<div t-if="o.partner_id.vat">
+					<t t-esc="o.company_id.country_id.vat_label or 'RFC'"/>: <span t-field="o.partner_id.vat"/>
+				</div>
+				<div>
+					<span t-field="o.partner_id.property_account_position_id"/>
+				</div>
+				<div>
+					<span>Uso de CFDI:</span>
+					<!--span t-esc="xml.Receptor.get('UsoCFDI')"/--> - 
+					<span t-field="o.l10n_mx_edi_usage"/>
+					<!--t t-esc="dict(o.fields_get(allfields=['l10n_mx_edi_usage'])['l10n_mx_edi_usage']['selection'])[o.l10n_mx_edi_usage]"/-->
+				</div>
+			</div>
+		</xpath>
+		<xpath expr="//h2" position="replace">
+			<h2 style="color:#0024FF">
+				<span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Factura</span>
+				<span t-if="o.type == 'out_invoice' and o.state == 'draft'">Factura Borrador</span>
+				<span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Factura Cancelada<span t-field="o.move_id.name"/> </span>
+				<span t-if="o.type == 'out_refund'">Nota de Credito</span>
+				<span t-if="o.type == 'in_refund'">Nota de Credito Proveedor</span>
+				<span t-if="o.type == 'in_invoice'">Factura Proveedor</span>
+				<span t-field="o.number"/>
+			</h2>
+		</xpath>
+		<xpath expr="//div[hasclass('row','mt32','mb32')]" position="replace">
+			<div class="row mt32 mb32">
+				<div class="col-xs-2" t-if="o.date_invoice">
+					<strong>Fecha Factura:</strong>
+					<p t-field="o.date_invoice"/>
+				</div>
+				<div class="col-xs-2" t-if="o.date_due and o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">
+					<strong>Fecha Vencimiento:</strong>
+					<p t-field="o.date_due"/>
+				</div>
+				<div class="col-xs-2" t-if="o.origin">
+					<strong>Codigo:</strong>
+					<p t-field="o.origin"/>
+				</div>
+			</div>
+		</xpath>
+		<xpath expr="//div[@t-if='o.origin']" position="after">
+			<t t-if="o.l10n_mx_edi_cfdi_uuid">
+				<div class="col-xs-2">
+					<strong>Tipo de Pago:</strong>
+					<p t-esc="' - '.join([o.l10n_mx_edi_payment_method_id.code, o.l10n_mx_edi_payment_method_id.name])"/>
+				</div>
+				<div class="col-xs-2">
+					<strong>Método de Pago:</strong>
+					<p t-esc="xml.get('formaDePago', xml.get('MetodoPago'))"/>
+				</div>
+				<div class="col-xs-2">
+					<strong>Condiciones de Pago:</strong>
+					<p t-field="o.payment_term_id"/>
+				</div>
+				<div class="col-xs-2">
+					<strong>Moneda:</strong>
+					<p t-esc="xml.get('Moneda')"/>
+				</div>
+			</t>
+		</xpath>
+		<xpath expr="//table[hasclass('table','table-condensed')]" position="replace">
+			<table class="table table-condensed" name="invoice_line_table">
+				<thead style="color:#0024FF !important;">
+					<tr style="color:#0024FF !important;">
+						<th style="color:#0024FF !important;">Código SAT</th>
+						<th style="color:#0024FF !important;">Descripción</th>
+						<th  class="hidden">Source Document</th>
+						<th style="color:#0024FF !important;" class="text-right">Cantidad</th>
+						<th style="color:#0024FF !important;" class="text-right">Unidad de Medida SAT</th>
+						<th style="color:#0024FF !important;" class="text-right">Precio Unitario</th>
+						<th style="color:#0024FF !important;" t-if="display_discount" class="text-right">Descuento</th>
+						<th style="color:#0024FF !important;" class="text-right">Monto</th>
+					</tr>
+				</thead>
+				<tbody class="invoice_tbody">
+					<tr t-foreach="o.invoice_line_ids" t-as="l">
+						<td><span t-field="l.product_id.l10n_mx_edi_code_sat_id"/></td>
+						<td>
+							<t t-if="l.product_id.default_code">
+								[<span t-field="l.product_id.default_code"/>]
+							</t>
+							<span t-field="l.product_id.name"/>
+						</td>
+						<td class="hidden"><span t-field="l.origin"/></td>
+						<td class="text-right">
+							<span t-field="l.quantity"/>
+						</td>
+						<td class="text-right">
+							<span t-field="l.product_id.uom_id.l10n_mx_edi_code_sat_id" />
+						</td>
+						<td class="text-right">
+							<span t-field="l.price_unit"/>
+						</td>
+						<td t-if="display_discount" class="text-right">
+							<span t-field="l.discount"/>
+						</td>
+						<td class="text-right" id="subtotal">
+							<span t-field="l.price_subtotal"
+								t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+						</td>
+					</tr>
+					<tr t-foreach="range(max(5-len(o.invoice_line_ids),0))" t-as="l">
+						<td>&amp;nbsp;</td>
+						<td class="hidden"></td>
+						<td></td>
+						<td></td>
+						<td t-if="display_discount"></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</xpath>
+		<xpath expr="//div[hasclass('clearfix')]" position="replace">
+			<div class="clearfix">
+						<div id="total" class="row pull-right">
+							<div>
+								<table class="table-condensed" style="min-width: 250px;max-width: 400px;">
+									<tr class="border-black" style="border-bottom:1px solid #dddddd;">
+										<td style="color:#0024FF !important;"><strong>Subtotal</strong></td>
+										<td class="text-right">
+											<span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+										</td>
+									</tr>
+									<t t-set="tax_groups_length" t-value="len(o._get_tax_amount_by_group())"/>
+									<t t-foreach="o._get_tax_amount_by_group()" t-as="amount_by_group">
+										<tr style="border-bottom:1px solid #dddddd;">
+											<t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
+												<td><span t-esc="amount_by_group[0]"/></td>
+												<td class="text-right">
+													<span t-esc="amount_by_group[1]" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+												</td>
+											</t>
+											<t t-else="">
+												<td>
+													<span t-esc="amount_by_group[0]"/>
+												</td>
+												<td class="text-right">
+													<span t-esc="amount_by_group[1]" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+												</td>
+											</t>
+										</tr>
+									</t>
+									<tr class="border-black">
+										<td style="color:#0024FF !important;"><strong>Total</strong></td>
+										<td class="text-right">
+											<span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+		</xpath>
+		<xpath expr="//p[@t-if='o.comment']" position="replace">
+		</xpath>
+		<xpath expr="//div[hasclass('complement-details','col-xs-9')]/div[10]" position="replace">
+			<div class="digital-stamp-content">
+				<span>Certificado del Emisor:</span> <span t-esc="xml.get('noCertificado', xml.get('NoCertificado'))"/>
+				<span> | Lugar de Expedición:</span> <span t-esc="xml.get('LugarExpedicion')"/>
+				<span> | Régimen Fiscal:</span>
+					<t t-if="xml.get('version', '') == '3.2'"> <span t-esc="xml.Emisor.RegimenFiscal.get('Regimen')"/></t>
+					<t t-if="xml.get('Version', '') == '3.3'"> <span t-esc="xml.Emisor.get('RegimenFiscal', '')"/></t>
+				<span> | Fecha de Emisión:</span> <span t-esc="xml.get('fecha', xml.get('Fecha', '')).replace('T', ' ')"/>
+				<span> | Certificado SAT:</span> <span t-esc="tfd.get('NoCertificadoSAT')"/>
+				<span> | RFC Proveedor de Certificación:</span> <span t-esc="tfd.get('RfcProvCertif')"/>
+				<span> | Fecha de Certificación:</span> <span t-esc="tfd.get('FechaTimbrado', '').replace('T', ' ')"/>
+				<span> | Folio Fiscal (UUID):</span> <span t-esc="tfd.get('UUID')"/>
+			</div>
+		</xpath>
+		<data id="document_inherit_sale" inherit_id="sale.report_invoice_document_inherit_sale">
+			<xpath expr="//div[1]/div[hasclass('col-xs-5','col-xs-offset-1')]" position="replace">
+			</xpath>
+		</data>
+	</template>
+	<template id="l10n_mx_payment_receipt" inherit_id="account.report_payment_receipt">
+		<xpath expr="//div[@t-if['o.partner_type']]" position="replace">
+			<div class="row"></div>
+        </xpath>
+        <xpath expr="//div[hasclass('row')]" position="replace">
+        	<div class="row">
+                <t t-if="o.l10n_mx_edi_cfdi_uuid">
+	                <!--New global variables-->
+	                <t t-set="xml" t-value="o.l10n_mx_edi_get_xml_etree()"/>
+	                <t t-set="tfd" t-value="o.l10n_mx_edi_get_tfd_etree(xml)"/>
+	                <t t-set="tfd_original_string" t-value="o._get_l10n_mx_edi_cadena()"/>
+	            </t>
+	            <div class="col-xs-6" t-if="o.payment_date">
+	            	<strong>Fecha de pago: </strong>
+                    <span t-field="o.payment_date"/>
+                </div>
+                <div class="col-xs-6" t-if="o.partner_type">
+                    <strong>Cliente: </strong>
+                    <t t-if="o.partner_id.parent_id.name">
+						<span itemprop="name" t-esc="o.partner_id.parent_id.name"/>
+					</t>
+					<t t-elif="not o.partner_id.parent_id.name">
+						<span itemprop="name" t-esc="o.partner_id.name"/>
+					</t>
+                </div>
+            </div>
+            <div class="row mt32">
+            	<div class="col-xs-4" t-if="o.l10n_mx_edi_cfdi_uuid and o.l10n_mx_edi_cfdi_supplier_rfc">
+	                <span t-if="o.partner_id.vat != o.l10n_mx_edi_cfdi_supplier_rfc"><strong>RFC:</strong> <span t-esc="o.partner_id.vat"/></span>
+	            </div>
+	            <div class="col-xs-4" t-if="o.l10n_mx_edi_cfdi_uuid and o.l10n_mx_edi_payment_method_id">
+	                <strong>Forma de pago:</strong>
+	                <span t-esc="' - '.join([o.l10n_mx_edi_payment_method_id.code, o.l10n_mx_edi_payment_method_id.name])"/>
+	            </div>
+	            <t t-if="o.l10n_mx_edi_cfdi_uuid">
+	                <div class="col-xs-4">
+	                	<strong>Uso CFDI: </strong><span t-esc="xml.Receptor.get('UsoCFDI')"/>
+	                </div>
+	            </t>
+            </div>
+                <div class="col-xs-4" t-if="o.l10n_mx_edi_cfdi_uuid">
+                        <strong>Lugar Expedicion:</strong> <span t-esc="xml.get('LugarExpedicion')"/>
+                    </div>
+        </xpath>
+        <xpath expr="//div[hasclass('row','mb64')]" position="replace">
+        	<div class="row mb64">
+        		<div class="col-xs-3" t-if="o.rfc_ordenante">
+	            	<strong>RFC Cuenta Ordenante: </strong>
+                    <span t-field="o.rfc_ordenante"/>
+                </div>
+                <div class="col-xs-3" t-if="o.cta_ordenante">
+	            	<strong>Cuenta Ordenante: </strong>
+                    <span t-field="o.cta_ordenante"/>
+                </div>
+                <div class="col-xs-3" t-if="o.rfc_beneficiaro">
+	            	<strong>RFC Cuenta Beneficiaria: </strong>
+                    <span t-field="o.rfc_beneficiaro"/>
+                </div>
+                <div class="col-xs-3" t-if="o.cta_beneficiaro">
+	            	<strong>Cuenta Beneficiaria: </strong>
+                    <span t-field="o.cta_beneficiaro"/>
+                </div>
+        	</div>
+        </xpath>
+		<xpath expr="//div[hasclass('row','mb64')]" position="after">
+			<t t-if="o.invoice_ids">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Clave producto</th>
+							<th class="text-right">Cantidad</th>
+							<th class="text-right">Unidad</th>
+							<th>Descripcion</th>
+							<th class="text-right">Precio unitario</th>
+							<th class="text-right">Importe</th>
+						</tr>
+					</thead>
+					<tbody class="invoice_tbody">
+					  	<tr style="page-break-inside: avoid">
+							<td>84111506</td>
+							<td class="text-right">1</td>
+							<td class="text-right">ACT</td>
+							<td>Pago</td>
+							<td class="text-right">$0.00</td>
+							<td class="text-right">$0.00</td>
+					  	</tr>
+				 	</tbody>
+				</table>
+				<div class="row">
+                     <div class="col-xs-4 pull-right">
+                          <table class="table table-condensed">
+                                 <tr class="border-black">
+                                     <td><strong>Subtotal</strong></td>
+                                     <td class="text-right">$0.00</td>
+                                 </tr>
+                          </table>
+                     </div>
+               </div>
+               <div class="row">
+                    <div class="col-xs-4 pull-right">
+                         <table class="table table-condensed">
+                                <tr class="border-black">
+                                     <td><strong>Total</strong> </td>
+                                     <td class="text-right">$0.00</td>
+                                </tr>
+                         </table>
+                    </div>
+                </div>
+			</t>
+		</xpath>
+		
+	</template>
+</odoo>

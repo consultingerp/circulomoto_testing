@@ -1,0 +1,53 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* import_product_images
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-07-16 17:25+0000\n"
+"PO-Revision-Date: 2018-07-16 12:28-0500\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: es_MX\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#. module: import_product_images
+#: model:ir.ui.view,arch_db:import_product_images.images_success
+msgid "All the images have been loaded correctly"
+msgstr "Todas las imágenes han sido cargadas correctamente."
+
+#. module: import_product_images
+#: model:ir.ui.view,arch_db:import_product_images.import_product_images
+msgid "Import images"
+msgstr "Importar imágenes"
+
+#. module: import_product_images
+#: model:ir.ui.view,arch_db:import_product_images.import_product_images
+msgid "Import or update product images"
+msgstr "Importar o actualizar imágenes de los productos"
+
+#. module: import_product_images
+#: model:website.menu,name:import_product_images.s4g_import_images_item
+msgid "Import product images"
+msgstr "Importar imágenes de productos"
+
+#. module: import_product_images
+#: model:ir.ui.view,arch_db:import_product_images.images_failed
+msgid "Please check your images, no one match with the default code of the products"
+msgstr "Por favor verifica tus imágenes, el nombre de ninguna es igual a la referencia interna de los productos."
+
+#. module: import_product_images
+#: model:ir.ui.view,arch_db:import_product_images.import_product_images
+msgid "Select images"
+msgstr "Seleccionar imágenes"
+
+#. module: import_product_images
+#: model:ir.ui.view,arch_db:import_product_images.import_product_images
+msgid "Sorry, you can't upload images to the products"
+msgstr "Lo sentimos, tu no puedes importar imágenes de los productos."

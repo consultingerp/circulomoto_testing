@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<template id="report_receipt_pos">
+			<t t-call="web.internal_layout">
+	            <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+	            <div class="page" style="text-align: left;margin: 10px;font-size: 18px;padding:18px;display: inline-block;overflow: hidden;">
+	            	<div class="row">
+	                    <div t-if="o.partner_id">
+	                        <span t-field="o.partner_id.name"/>
+	                    </div>
+	                </div>
+	                <div style="text-align:center;">
+	                	<span>FARV710820391-Maria Veronica Franco Rivera</span><br/>
+						<span>Av. Gustavo Baz #203, Bosque de Echegaray,</span><br/>
+						<span>Naucalpan de Juárez, Edo de Mex, CP 53310 </span><br/>
+						<span>------------------------------------------</span><br/>
+						<span>****<span t-field="o.name"/>****</span><br/>
+						<span>------------------------------------------</span><br/>
+	                </div>
+	                <span t-field="o.pos_reference"/>
+	                <table class='receipt-orderlines'>
+	                	<colgroup>
+		                    <col width='50%' />
+		                    <col width='25%' />
+		                    <col width='25%' />
+		                </colgroup>
+		                <t t-set="precio" t-value="0" />
+		                <tr t-foreach="o.lines" t-as="orderline">
+		                    <td>
+		                        <t t-esc="orderline.product_id.name"/>
+		                         <t t-if="orderline.discount > 0">
+		                            <div class="pos-disc-font" style="font-size: 14px;font-style:italic;color: #808080;">
+		                                Con un <t t-esc="orderline.discount"/>% descuento
+		                            </div>
+		                        </t>
+		                    </td>
+		                    <td class="pos-right-align" style="text-align: right;">
+		                        <t t-esc="orderline.qty"/>
+		                    </td>
+		                    <td class="pos-right-align" style="text-align: right;">
+		                        <t t-esc="orderline.price_unit" t-options="{'widget': 'float', 'precision': currency_precision}"/>
+		                        <t t-set="precio" t-value="precio+orderline.price_subtotal"/>
+		                    </td>
+		                </tr>
+		            </table>
+		            <br/>
+		            <table>
+		            	<colgroup>
+		                    <col width='90%' />
+		                </colgroup>
+		                <tr>
+		                    <td>Subtotal:</td>
+		                    <td class="pos-right-align" style="text-align: right;">
+		                        <span><t t-esc="precio"/></span>
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <td>Impuestos:</td>
+		                    <td class="pos-right-align" style="text-align: right;">
+		                        <t t-esc="o.amount_tax"/>
+		                    </td>
+		                </tr>
+		                <tr class="emph">
+		                    <td>Total:</td>
+		                    <td class="pos-right-align" style="text-align: right;">
+		                        <t t-esc="o.amount_total"/>
+		                    </td>
+		                </tr>
+		            </table>
+		            <br/>
+		            <div style="text-align:center;">
+	                	<t t-esc="o.config_id.receipt_footer"/>
+	                </div>
+	            </div>
+	        </t>
+		</template>
+		<template id="report_receipt_return">
+			<t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="pos_ticket.report_receipt_pos" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+		</template>
+	</data>
+</odoo>

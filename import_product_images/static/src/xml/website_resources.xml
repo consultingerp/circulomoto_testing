@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="import_product_images_resources" name="Assets to the website" inherit_id="website.assets_frontend">
+		<xpath expr="." position="inside">
+			<!-- All the CSS -->
+			<link rel="stylesheet" href="/import_product_images/static/src/css/import_product_images.css"/>
+			<!-- All the js -->
+			<script type="text/javascript" src="/import_product_images/static/src/js/import_product_images.js" />
+		</xpath>
+	</template>
+</odoo>
