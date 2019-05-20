@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='quantity']" position='after'>
                     <field name="x_valor_promedio_related" string="Valor Promedio"/>
-                    <field name="x_valor" string="Valor"/>
+                    <field name="x_valor" string="Valor" />
                 </xpath>
             </field>
         </record>

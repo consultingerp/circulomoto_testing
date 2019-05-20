@@ -21,7 +21,11 @@ class StockQuantClass(models.Model):
             record.x_valor = record.x_valor_promedio_related * record.quantity
             
     x_valor_promedio_related = fields.Float(string="Valor promedio", 
-                                            related='product_id.x_valor_promedio'
+                                            related='product_id.x_valor_promedio',
+                                            #store=True,
                                             )
     x_valor = fields.Float(string="Valor", 
-                           compute='_calcula_valor')
+                           compute='_calcula_valor',
+                           #store=True,
+                           #default=1,
+                           )
