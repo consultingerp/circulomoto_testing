@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="group_update_qty" model="res.groups">
+            <field name="name">Ver_actualizar_qty</field>
+            <field name="comment">Grupo para visualizar boton Actualizar Cantidad a mano</field>
+        </record>
+    </data>
+</odoo>

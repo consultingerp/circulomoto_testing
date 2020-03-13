@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="adquisicion_mercancias" model="tranferencia.uso">
+            <field name="name">Adquisición de mercancías</field>
+            <field name="codigo">G01</field>
+        </record>
+        <record id="devoluciones_descuentos_bonificaciones" model="tranferencia.uso">
+            <field name="name">Devoluciones, descuentos o bonificaciones</field>
+            <field name="codigo">G02</field>
+        </record>
+        <record id="gastos_general" model="tranferencia.uso">
+            <field name="name">Gastos en general</field>
+            <field name="codigo">G03</field>
+        </record>
+        <record id="uso_construcciones" model="tranferencia.uso">
+            <field name="name">Construcciones</field>
+            <field name="codigo">l01</field>
+        </record>
+        <record id="mobiliario_equipo_oficina_inversiones" model="tranferencia.uso">
+            <field name="name">Mobiliario y equipo de oficina por inversiones</field>
+            <field name="codigo">l02</field>
+        </record>
+        <record id="equipo_transporte" model="tranferencia.uso">
+            <field name="name">Equipo de transporte</field>
+            <field name="codigo">l03</field>
+        </record>
+        <record id="equipo_computo_accesorios" model="tranferencia.uso">
+            <field name="name">Equipo de cómputo y accesorios</field>
+            <field name="codigo">l04</field>
+        </record>
+        <record id="dados_troqueles_moldes_matrices_herramientas" model="tranferencia.uso">
+            <field name="name">Dados, troqueles, moldes, matrices y herramientas</field>
+            <field name="codigo">l05</field>
+        </record>
+        <record id="comunicaciones_telefonicas" model="tranferencia.uso">
+            <field name="name">Comunicaciones telefónicas</field>
+            <field name="codigo">l06</field>
+        </record>
+        <record id="comunicaciones_satelitales" model="tranferencia.uso">
+            <field name="name">Comunicaciones satelitales</field>
+            <field name="codigo">l07</field>
+        </record>
+        <record id="otra_maquinaria_equipo'" model="tranferencia.uso">
+            <field name="name">Otra maquinaria y equipo'</field>
+            <field name="codigo">l08</field>
+        </record>
+        <record id="honorarios_medicos_dentales_gastos_hospitalarios" model="tranferencia.uso">
+            <field name="name">Honorarios médicos,dentales y gastos hospitalarios</field>
+            <field name="codigo">D01</field>
+        </record>
+        <record id="gastos_medicos_incapacidad_discapacidad" model="tranferencia.uso">
+            <field name="name">Gastos médicos por incapacidad o discapacidad</field>
+            <field name="codigo">D02</field>
+        </record>
+        <record id="gastos_funerales" model="tranferencia.uso">
+            <field name="name">Gastos funerales</field>
+            <field name="codigo">D03</field>
+        </record>
+        <record id="uso_donativos" model="tranferencia.uso">
+            <field name="name">Donativos</field>
+            <field name="codigo">D04</field>
+        </record>
+        <record id="intereses_reales_efectivamente_pagados" model="tranferencia.uso">
+            <field name="name">Intereses reales efectivamente pagados</field>
+            <field name="codigo">D05</field>
+        </record>
+        <record id="aportaciones_voluntarias_sar" model="tranferencia.uso">
+            <field name="name">Aportaciones voluntarias al SAR.</field>
+            <field name="codigo">D06</field>
+        </record>
+        <record id="primas_seguros_gastos_medicos" model="tranferencia.uso">
+            <field name="name">Primas por seguros de gastos médicos</field>
+            <field name="codigo">D07</field>
+        </record>
+        <record id="gastos_transportacion_escolar_obligatoria" model="tranferencia.uso">
+            <field name="name">Gastos de transportación escolar obligatoria</field>
+            <field name="codigo">D08</field>
+        </record>
+        <record id="depositos_cuentas_ahorro_primas_base_pensiones" model="tranferencia.uso">
+            <field name="name">Depósitos en cuentas para el ahorro, primas que tengan como base de pensiones</field>
+            <field name="codigo">D09</field>
+        </record>
+        <record id="pagos_servicios_educativos" model="tranferencia.uso">
+            <field name="name">pagos de servicios educativos (colegiaturas)</field>
+            <field name="codigo">D10</field>
+        </record>
+        <record id="por_definir" model="tranferencia.uso">
+            <field name="name">por definir</field>
+            <field name="codigo">P01</field>
+        </record>
+    </data>
+</odoo>

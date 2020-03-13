@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cm_ocultar_elementos_cm_ocultar_elementos_qty,cm_ocultar_elementos.cm_ocultar_elementos_qty,model_cm_ocultar_elementos_cm_ocultar_elementos_qty,,1,0,0,0
+
